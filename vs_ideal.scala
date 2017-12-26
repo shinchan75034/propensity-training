@@ -35,5 +35,9 @@ val j3 = j2.join(broadcast(tvandwebHH), j2("mob_ban")===tvandwebHH("wban"), "lef
 val newDF = j3.na.fill(0, Seq("tvOnly", "webOnly", "tvandweb"))
 val newDF2 = newDF.withColumn("exposureStatus", when($"tvOnly"===0 and $"webOnly"===0 and $"tvandweb"===0, 0).otherwise(1))
 
+val newDF3 = newDF2.filter("estimated_hh_income is not null")
+newDF3.distinct.write.mode("overwrite").option("path", "/apps/advertising/audience_measurement/kt6238/u76/db/acx_gold_2_vs").saveAsTable("kt6.acx_gold_2_vs")
 
-newDF2.distinct.write.mode("overwrite").option("path", "/apps/advertising/audience_measurement/u76/db/acx_gold_1_vs").saveAsTable("u76.acx_gold_1_vs")
+
+val fileLocation="/apps/advertising/audience_measurement/kt6238/u76/hdfs/acx_gold_2_vs"
+newDF3.write.format("csv").option("header","true").save(fileLocation)
