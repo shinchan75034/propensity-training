@@ -144,7 +144,7 @@ val df2 = disassembler.transform(df1)
 val df3 = df2.drop("probability").drop("probability_0").distinct
 
 val j1 = good_data.join(df3, good_data("mob_ban")===df3("mob_ban")).drop(df3("mob_ban"))
-val j2 = j1.select("mob_ban", "estimated_hh_income","household_size","number_adults","number_children","probability_1")
+val j2 = j1.select("mob_ban", "estimated_hh_income","household_size","number_adults","number_children","owner_renter", "home_property_type", "probability_1")
 
 
 j2.distinct.write.mode("overwrite").option("path", "/apps/advertising/audience_measurement/u76/db/train_ps").saveAsTable("u76.train_ps")
